@@ -6,6 +6,12 @@
 <title>ARP.SYS // Almadha Rafif Prastya</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
+.ee-line{
+  opacity:0;transform:translateX(-10px);
+  transition:opacity .35s ease, transform .35s ease;
+  margin-bottom:8px;
+}
+.ee-line.show{opacity:1;transform:translateX(0);}
 :root {
   --bg:#f0f4f8; --bg2:#e2eaf2; --bg3:#ffffff;
   --blue:#0066ff; --blue-dim:#3385ff; --blue-dark:#004acc;
@@ -343,19 +349,19 @@ footer span{color:var(--blue);font-weight:700;}
 <div id="easter-egg">
   <div class="ee-terminal">
     <div class="ee-text">
-      <span style="color:var(--text-dim)">// executing command...</span><br>
-      <span style="color:var(--blue);font-weight:700">$ </span><span style="color:var(--cyan)">sudo hire almadha</span><br><br>
-      <span style="color:var(--text-dim)">Verifying credentials...</span><br>
-      <span style="color:var(--text-dim)">Checking skill stack...</span><br>
-      <span style="color:var(--text-dim)">Running background check...</span><br><br>
+      <p class="ee-line" id="el1"><span style="color:var(--text-dim)">// executing command...</span></p>
+      <p class="ee-line" id="el2"><span style="color:var(--blue);font-weight:700">$</span> <span style="color:var(--cyan)">sudo hire almadha</span></p>
+      <p class="ee-line" id="el3"><span style="color:var(--text-dim)">Verifying credentials...</span></p>
+      <p class="ee-line" id="el4"><span style="color:var(--text-dim)">Checking skill stack...</span></p>
+      <p class="ee-line" id="el5"><span style="color:var(--text-dim)">Running background check...</span></p>
     </div>
-    <div class="ee-access">✅ ACCESS GRANTED</div>
-    <div style="color:var(--blue);font-size:1.05rem;font-weight:700;line-height:1.8;">
-      Welcome to the team.<br>
+    <div class="ee-access" id="el6" style="display:none">ACCESS GRANTED</div>
+    <div class="ee-line" id="el7" style="display:none;color:var(--blue);font-size:1.05rem;font-weight:700;line-height:1.8;">
+      Thank you for reaching out!.<br>
       <span style="color:var(--text-dim);font-size:.7rem;font-weight:400">// Best decision you've made today.</span>
     </div>
-    <div style="color:var(--text-dim);font-size:.62rem;margin-top:12px;letter-spacing:2px;">redirecting to WhatsApp in <span id="ee-countdown">3</span>s...</div>
-    <button class="ee-close" onclick="closeEaster()">[ CLOSE ]</button>
+    <div class="ee-line" id="el8" style="display:none;color:var(--text-dim);font-size:.62rem;margin-top:12px;letter-spacing:2px;">redirecting to WhatsApp in <span id="ee-countdown">3</span>s...</div>
+    <button class="ee-close" id="el9" style="display:none" onclick="closeEaster()">[ CLOSE ]</button>
   </div>
 </div>
 
@@ -795,20 +801,51 @@ function run(cmd){
     easter.classList.add('show');
     closeCmd();
 
-    // Countdown & redirect to WhatsApp
-    let count=3;
-    document.getElementById('ee-countdown').textContent=count;
-    easterTimer=setInterval(()=>{
-      count--;
-      const cd=document.getElementById('ee-countdown');
-      if(cd) cd.textContent=count;
-      if(count<=0){
-        clearInterval(easterTimer);
-        const msg=encodeURIComponent("Hai Almadha!\n\nSaya baru saja melihat portofolio dan pengalaman kerjamu, dan sepertinya profil kamu sangat sesuai dengan kandidat yang saya cari.\n\nSaya ingin mengenal lebih jauh tentang kamu dan mendiskusikan kemungkinan kolaborasi. Apakah kamu available untuk ngobrol sebentar?");
-        window.open('https://wa.me/6288989862043?text='+msg,'_blank');
-        closeEaster();
-      }
-    },1000);
+    // Reset semua dulu
+    ['el1','el2','el3','el4','el5','el6','el7','el8','el9'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el) return;
+      el.classList.remove('show');
+      if(['el6','el7','el8','el9'].includes(id)) el.style.display='none';
+    });
+
+    // Munculkan satu per satu
+    const steps=[
+      {id:'el1', delay:200},
+      {id:'el2', delay:600},
+      {id:'el3', delay:1100},
+      {id:'el4', delay:1700},
+      {id:'el5', delay:2300},
+      {id:'el6', delay:3000},
+      {id:'el7', delay:3600},
+      {id:'el8', delay:4100},
+      {id:'el9', delay:4100},
+    ];
+    steps.forEach(({id,delay})=>{
+      setTimeout(()=>{
+        const el=document.getElementById(id);
+        if(!el) return;
+        el.style.display='block';
+        setTimeout(()=>el.classList.add('show'),20);
+      }, delay);
+    });
+
+    // Countdown WhatsApp mulai setelah semua muncul
+    setTimeout(()=>{
+      let count=3;
+      document.getElementById('ee-countdown').textContent=count;
+      easterTimer=setInterval(()=>{
+        count--;
+        const cd=document.getElementById('ee-countdown');
+        if(cd) cd.textContent=count;
+        if(count<=0){
+          clearInterval(easterTimer);
+          const msg=encodeURIComponent("Hai Almadha!\n\nSaya baru saja melihat portofolio dan pengalaman kerjamu, dan sepertinya profil kamu sangat sesuai dengan kandidat yang saya cari.\n\nSaya ingin mengenal lebih jauh tentang kamu dan mendiskusikan kemungkinan kolaborasi. Apakah kamu available untuk ngobrol sebentar?");
+          window.open('https://wa.me/628898986204?text='+msg,'_blank');
+          closeEaster();
+        }
+      },1000);
+    }, 4200);
     return;
   }
   const routes={

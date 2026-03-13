@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Almadha Rafif — Data Analytics Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:#080b14; --surface:#0d1220; --card:#111827; --card2:#151e2e;
+  --border:rgba(99,179,237,0.12); --border2:rgba(99,179,237,0.22);
+  --accent:#38bdf8; --accent2:#f59e0b; --accent3:#34d399; --accent4:#f472b6;
+  --red:#f87171; --text:#e2eaf5; --muted:#5a7a9a;
+  --mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(99,179,237,0.03)1px,transparent 1px),linear-gradient(90deg,rgba(99,179,237,0.03)1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;height:60px;background:rgba(8,11,20,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--mono);font-size:0.85rem;color:var(--accent);letter-spacing:1px;}
+.nav-logo span{color:var(--muted);}
+.nav-links{display:flex;gap:0;list-style:none;}
+.nav-links a{padding:0.4rem 0.9rem;font-family:var(--mono);font-size:0.7rem;color:var(--muted);text-decoration:none;letter-spacing:1px;text-transform:uppercase;border:1px solid transparent;border-radius:6px;transition:all 0.2s;}
+.nav-links a:hover{color:var(--accent);border-color:var(--border2);}
+
+/* HERO */
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 3rem 3rem;max-width:1100px;margin:0 auto;}
+.hero-eyebrow{font-family:var(--mono);font-size:0.75rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.5s 0.1s ease forwards;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,6vw,5.5rem);font-weight:800;line-height:1.0;letter-spacing:-2px;margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.5s 0.2s ease forwards;}
+.hero h1 em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px var(--accent);}
+.hero-desc{max-width:500px;color:var(--muted);font-size:1rem;margin-bottom:2.5rem;opacity:0;animation:fadeUp 0.5s 0.3s ease forwards;}
+.hero-pills{display:flex;flex-wrap:wrap;gap:0.6rem;margin-bottom:3rem;opacity:0;animation:fadeUp 0.5s 0.35s ease forwards;}
+.pill{font-family:var(--mono);font-size:0.72rem;padding:0.35rem 0.9rem;border-radius:4px;border:1px solid var(--border);color:var(--muted);letter-spacing:0.5px;}
+.pill.active{border-color:var(--accent);color:var(--accent);background:rgba(56,189,248,0.06);}
+.hero-stats{display:flex;gap:3rem;flex-wrap:wrap;opacity:0;animation:fadeUp 0.5s 0.4s ease forwards;}
+.hero-stat-num{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--accent2);}
+.hero-stat-label{font-size:0.78rem;color:var(--muted);font-family:var(--mono);letter-spacing:0.5px;}
+.scroll-hint{position:absolute;bottom:2.5rem;left:3rem;font-family:var(--mono);font-size:0.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;gap:0.8rem;opacity:0;animation:fadeUp 0.5s 0.6s ease forwards;}
+.scroll-hint::before{content:'';display:block;width:40px;height:1px;background:var(--muted);}
+
+/* SECTION */
+.section-wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:5rem 3rem;}
+.section-num{font-family:var(--mono);font-size:0.72rem;color:var(--accent);letter-spacing:2px;margin-bottom:0.5rem;}
+.section-wrap h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
+.section-wrap h2 span{color:var(--accent2);}
+.section-sub{margin-top:0.8rem;color:var(--muted);font-size:0.9rem;max-width:560px;margin-bottom:3rem;}
+.full-divider{position:relative;z-index:1;border:none;height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);}
+
+/* INSIGHT */
+.insight-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;}
+.insight-box{background:var(--card2);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:1rem 1.2rem;}
+.insight-box.yellow{border-left-color:var(--accent2);}
+.insight-box.green{border-left-color:var(--accent3);}
+.insight-box.pink{border-left-color:var(--accent4);}
+.insight-box.red{border-left-color:var(--red);}
+.insight-val{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;margin-bottom:0.2rem;}
+.insight-val.blue{color:var(--accent);}.insight-val.yellow{color:var(--accent2);}.insight-val.green{color:var(--accent3);}.insight-val.pink{color:var(--accent4);}.insight-val.red{color:var(--red);}
+.insight-desc{font-size:0.78rem;color:var(--muted);}
+
+/* TABLE */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:2rem;overflow-x:auto;}
+.table-title{padding:0.9rem 1.4rem;background:var(--surface);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:0.72rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:0.5rem;}
+.table-title::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent3);}
+table{width:100%;border-collapse:collapse;font-size:0.85rem;min-width:520px;}
+thead th{background:rgba(99,179,237,0.05);padding:0.8rem 1.2rem;text-align:left;font-family:var(--mono);font-size:0.7rem;color:var(--accent);letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);}
+tbody td{padding:0.75rem 1.2rem;border-bottom:1px solid var(--border);}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:rgba(99,179,237,0.03);}
+.td-mono{font-family:var(--mono);font-size:0.82rem;}
+.td-up{color:var(--accent3);font-family:var(--mono);font-size:0.82rem;}
+.td-down{color:var(--red);font-family:var(--mono);font-size:0.82rem;}
+.td-neutral{color:var(--accent2);font-family:var(--mono);font-size:0.82rem;}
+.badge-sm{display:inline-block;padding:0.15rem 0.6rem;border-radius:3px;font-size:0.68rem;font-family:var(--mono);}
+.bg{background:rgba(52,211,153,0.12);color:var(--accent3);}
+.by{background:rgba(245,158,11,0.12);color:var(--accent2);}
+.br{background:rgba(248,113,113,0.12);color:var(--red);}
+.bb{background:rgba(56,189,248,0.12);color:var(--accent);}
+
+/* CHARTS */
+.chart-grid{display:grid;gap:1.5rem;margin-bottom:2rem;}
+.cg2{grid-template-columns:1fr 1fr;}
+.cg3{grid-template-columns:1fr 1fr 1fr;}
+.chart-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.4rem;transition:border-color 0.2s;}
+.chart-box:hover{border-color:var(--border2);}
+.chart-box-title{font-family:var(--mono);font-size:0.72rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem;}
+.chart-box-title strong{color:var(--text);font-size:0.8rem;}
+
+/* FINDINGS */
+.findings{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-top:1.5rem;margin-bottom:3rem;}
+.finding{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;}
+.finding-icon{font-size:1.3rem;margin-bottom:0.6rem;}
+.finding h4{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;margin-bottom:0.3rem;}
+.finding p{font-size:0.8rem;color:var(--muted);}
+
+/* CODA TOOLS */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(480px,1fr));gap:1.5rem;}
+.tool-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:border-color 0.2s;}
+.tool-card:hover{border-color:var(--border2);}
+.tool-card-header{padding:1rem 1.4rem;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.tool-card-title{font-family:var(--mono);font-size:0.75rem;color:var(--text);letter-spacing:0.5px;display:flex;align-items:center;gap:0.6rem;}
+.tool-dot{width:8px;height:8px;border-radius:50%;background:var(--accent3);flex-shrink:0;}
+.tool-tag{font-family:var(--mono);font-size:0.65rem;padding:0.2rem 0.6rem;border-radius:3px;background:rgba(56,189,248,0.1);color:var(--accent);border:1px solid rgba(56,189,248,0.2);}
+.coda-frame-wrap{position:relative;width:100%;height:520px;}
+.coda-frame-wrap iframe{width:100%;height:100%;border:none;display:block;}
+.tool-note{padding:0.6rem 1.2rem;background:var(--surface);border-top:1px solid var(--border);font-family:var(--mono);font-size:0.65rem;color:var(--muted);}
+
+/* INFO BOX */
+.info-box{background:var(--card2);border:1px solid var(--border);border-left:3px solid var(--accent2);border-radius:0 10px 10px 0;padding:1.2rem 1.5rem;margin-top:2rem;font-size:0.85rem;}
+.info-box strong{color:var(--accent2);}
+.info-box code{font-family:var(--mono);font-size:0.8rem;background:rgba(56,189,248,0.08);color:var(--accent3);padding:0.1rem 0.5rem;border-radius:3px;}
+
+/* EBOOK VIEW ONLY */
+.ebook-section{position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.ebook-inner-new{max-width:1100px;margin:0 auto;padding:5rem 3rem;}
+.ebook-header-row{display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;margin-bottom:2rem;}
+.ebook-tag{font-family:var(--mono);font-size:0.72rem;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:1rem;}
+.ebook-inner-new h2{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:0.8rem;}
+.ebook-inner-new h2 span{color:var(--accent2);}
+.ebook-inner-new p{color:var(--muted);font-size:0.9rem;line-height:1.7;}
+.ebook-badge-row{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem;}
+.ebook-badge{font-family:var(--mono);font-size:0.68rem;padding:0.25rem 0.7rem;border-radius:3px;}
+.ebook-view-wrap{position:relative;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#0d1220;}
+.ebook-bar{padding:0.7rem 1.2rem;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.ebook-bar-left{font-family:var(--mono);font-size:0.72rem;color:var(--muted);display:flex;align-items:center;gap:0.5rem;}
+.ebook-bar-right{font-family:var(--mono);font-size:0.65rem;padding:0.2rem 0.8rem;border-radius:3px;background:rgba(248,113,113,0.1);color:var(--red);border:1px solid rgba(248,113,113,0.2);}
+.ebook-iframe{width:100%;height:700px;border:none;display:block;}
+
+/* FOOTER */
+footer{position:relative;z-index:1;padding:2rem 3rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+footer .footer-left{font-family:var(--mono);font-size:0.75rem;color:var(--muted);}
+footer .footer-left strong{color:var(--accent);}
+.footer-contact{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.footer-contact a{font-family:var(--mono);font-size:0.72rem;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-contact a:hover{color:var(--accent);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){.cg2,.cg3,.tools-grid{grid-template-columns:1fr;}.ebook-header-row{grid-template-columns:1fr;}}
+@media(max-width:768px){
+  nav{padding:0 1rem;}
+  .nav-links a{padding:0.35rem 0.5rem;font-size:0.6rem;}
+  .section-wrap{padding:3.5rem 1.2rem;}
+  .hero{padding:80px 1.2rem 3rem;}
+  footer{padding:1.5rem 1.2rem;flex-direction:column;}
+  .ebook-inner-new{padding:3rem 1.2rem;}
+  .ebook-iframe{height:420px;}
+  .coda-frame-wrap{height:380px;}
+  .scroll-hint{left:1.2rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">arp<span>.</span>data</div>
+  <ul class="nav-links">
+    <li><a href="#p1">Finance</a></li>
+    <li><a href="#p2">Logistik</a></li>
+    <li><a href="#p3">E-Commerce</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#ebook">EBook</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">// Data Analytics Portfolio</p>
+  <h1>Turning Data<br>Into <em>Insight</em></h1>
+  <p class="hero-desc">3 studi kasus analisa data — financial planning, optimasi logistik, dan performa e-commerce & digital marketing.</p>
+  <div class="hero-pills">
+    <span class="pill active">Python</span>
+    <span class="pill active">Excel</span>
+    <span class="pill active">Financial Analysis</span>
+    <span class="pill active">Data Visualization</span>
+    <span class="pill">Power BI</span>
+    <span class="pill">Google Analytics</span>
+    <span class="pill">SQL</span>
+  </div>
+  <div class="hero-stats">
+    <div><div class="hero-stat-num">3</div><div class="hero-stat-label">Case Studies</div></div>
+    <div><div class="hero-stat-num">12+</div><div class="hero-stat-label">Charts & Tables</div></div>
+    <div><div class="hero-stat-num">5+</div><div class="hero-stat-label">Yrs Experience</div></div>
+  </div>
+  <div class="scroll-hint">scroll to explore</div>
+</div>
+
+<hr class="full-divider">
+
+<!-- PROJECT 1: FINANCE -->
+<div class="section-wrap" id="p1">
+  <div class="section-num reveal">// 01 — Financial Planning & Analysis</div>
+  <h2 class="reveal">Revenue Performance<br><span>FPnA Dashboard</span></h2>
+  <p class="section-sub reveal">Monitoring target vs aktual revenue bulanan, analisa gap, cost structure, dan rekomendasi strategis.</p>
+
+  <div class="insight-row reveal">
+    <div class="insight-box yellow"><div class="insight-val yellow">Rp 6.7B</div><div class="insight-desc">Total Revenue YTD (Jan–Jun)</div></div>
+    <div class="insight-box green"><div class="insight-val green">+8.4%</div><div class="insight-desc">Rata-rata growth MoM</div></div>
+    <div class="insight-box"><div class="insight-val blue">94.2%</div><div class="insight-desc">Target Achievement Rate</div></div>
+    <div class="insight-box red"><div class="insight-val red">Mar</div><div class="insight-desc">Bulan terendah (−6.8% MoM)</div></div>
+  </div>
+
+  <div class="table-wrap reveal">
+    <div class="table-title">Tabel 1.1 — Monthly Revenue vs Target (Rp Juta)</div>
+    <table>
+      <thead><tr><th>Bulan</th><th>Target</th><th>Aktual</th><th>Gap</th><th>Achievement</th><th>MoM Growth</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Januari</td><td class="td-mono">980</td><td class="td-mono">942</td><td class="td-down">−38</td><td class="td-down">96.1%</td><td class="td-neutral">—</td><td><span class="badge-sm by">Near Miss</span></td></tr>
+        <tr><td>Februari</td><td class="td-mono">1,020</td><td class="td-mono">1,058</td><td class="td-up">+38</td><td class="td-up">103.7%</td><td class="td-up">+12.3%</td><td><span class="badge-sm bg">Achieved</span></td></tr>
+        <tr><td>Maret</td><td class="td-mono">1,050</td><td class="td-mono">986</td><td class="td-down">−64</td><td class="td-down">93.9%</td><td class="td-down">−6.8%</td><td><span class="badge-sm br">Miss</span></td></tr>
+        <tr><td>April</td><td class="td-mono">1,080</td><td class="td-mono">1,102</td><td class="td-up">+22</td><td class="td-up">102.0%</td><td class="td-up">+11.8%</td><td><span class="badge-sm bg">Achieved</span></td></tr>
+        <tr><td>Mei</td><td class="td-mono">1,150</td><td class="td-mono">1,178</td><td class="td-up">+28</td><td class="td-up">102.4%</td><td class="td-up">+6.9%</td><td><span class="badge-sm bg">Achieved</span></td></tr>
+        <tr><td>Juni</td><td class="td-mono">1,200</td><td class="td-mono">1,434</td><td class="td-up">+234</td><td class="td-up">119.5%</td><td class="td-up">+21.7%</td><td><span class="badge-sm bg">Achieved</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-grid cg2 reveal">
+    <div class="chart-box"><div class="chart-box-title"><strong>Revenue Target vs Aktual</strong> — 6 bulan</div><canvas id="c1a" height="200"></canvas></div>
+    <div class="chart-box"><div class="chart-box-title"><strong>MoM Growth Rate</strong> — % perubahan bulanan</div><canvas id="c1b" height="200"></canvas></div>
+  </div>
+
+  <div class="table-wrap reveal">
+    <div class="table-title">Tabel 1.2 — Cost Structure & EBITDA (Rp Juta)</div>
+    <table>
+      <thead><tr><th>Kategori</th><th>Q1</th><th>Q2</th><th>Δ QoQ</th><th>% Revenue Q2</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td class="td-mono">2,986</td><td class="td-mono">3,714</td><td class="td-up">+24.4%</td><td class="td-mono">100%</td></tr>
+        <tr><td>COGS</td><td class="td-mono">1,612</td><td class="td-mono">1,931</td><td class="td-down">+19.8%</td><td class="td-down">52%</td></tr>
+        <tr><td>Gross Profit</td><td class="td-mono">1,374</td><td class="td-mono">1,783</td><td class="td-up">+29.7%</td><td class="td-up">48%</td></tr>
+        <tr><td>OpEx</td><td class="td-mono">596</td><td class="td-mono">669</td><td class="td-neutral">+12.2%</td><td class="td-neutral">18%</td></tr>
+        <tr><td><strong>EBITDA</strong></td><td class="td-mono"><strong>778</strong></td><td class="td-mono"><strong>1,114</strong></td><td class="td-up"><strong>+43.2%</strong></td><td class="td-up"><strong>30%</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-grid cg2 reveal">
+    <div class="chart-box"><div class="chart-box-title"><strong>Cost Breakdown Q2</strong> — Komposisi biaya</div><canvas id="c1c" height="200"></canvas></div>
+    <div class="chart-box"><div class="chart-box-title"><strong>Achievement Rate</strong> — % vs target per bulan</div><canvas id="c1d" height="200"></canvas></div>
+  </div>
+
+  <div class="findings reveal">
+    <div class="finding"><div class="finding-icon">📈</div><h4>Juni bulan terkuat (119.5%)</h4><p>Lonjakan +21.7% MoM — kemungkinan dipicu promosi atau momentum musiman. Perlu direplikasi.</p></div>
+    <div class="finding"><div class="finding-icon">⚠️</div><h4>Maret perlu investigasi</h4><p>Satu-satunya bulan yang miss target signifikan (−6.8%). Perlu dicek faktor operasional atau demand drop.</p></div>
+    <div class="finding"><div class="finding-icon">💡</div><h4>EBITDA margin membaik</h4><p>Dari 26% Q1 naik ke 30% Q2 — efisiensi operasional terbukti lebih cepat dari pertumbuhan revenue.</p></div>
+  </div>
+</div>
+
+<hr class="full-divider">
+
+<!-- PROJECT 2: LOGISTIK -->
+<div class="section-wrap" id="p2">
+  <div class="section-num reveal">// 02 — Logistics & Operations Analytics</div>
+  <h2 class="reveal">Delivery Performance<br><span>Jatim–Bali Region</span></h2>
+  <p class="section-sub reveal">Analisa SLA compliance, lead time, dan penyebab failed delivery di jalur distribusi Jawa Timur – Bali.</p>
+
+  <div class="insight-row reveal">
+    <div class="insight-box green"><div class="insight-val green">87.3%</div><div class="insight-desc">On-Time Delivery Rate (avg)</div></div>
+    <div class="insight-box yellow"><div class="insight-val yellow">2.4</div><div class="insight-desc">Avg Days to Deliver</div></div>
+    <div class="insight-box pink"><div class="insight-val pink">12,840</div><div class="insight-desc">Total Paket / Bulan (avg)</div></div>
+    <div class="insight-box red"><div class="insight-val red">3.2%</div><div class="insight-desc">Failed Delivery Rate</div></div>
+  </div>
+
+  <div class="table-wrap reveal">
+    <div class="table-title">Tabel 2.1 — SLA Performance per Kota (2022)</div>
+    <table>
+      <thead><tr><th>Kota</th><th>Total Paket</th><th>On-Time</th><th>Late</th><th>Failed</th><th>OTD Rate</th><th>Avg Lead Time</th></tr></thead>
+      <tbody>
+        <tr><td>Surabaya</td><td class="td-mono">38,420</td><td class="td-up">35,247</td><td class="td-down">2,541</td><td class="td-down">632</td><td class="td-up">91.7%</td><td class="td-mono">1.8 hari</td></tr>
+        <tr><td>Malang</td><td class="td-mono">22,180</td><td class="td-up">19,634</td><td class="td-down">2,010</td><td class="td-down">536</td><td class="td-up">88.5%</td><td class="td-mono">2.1 hari</td></tr>
+        <tr><td>Denpasar</td><td class="td-mono">18,750</td><td class="td-up">16,218</td><td class="td-down">2,062</td><td class="td-down">470</td><td class="td-neutral">86.5%</td><td class="td-mono">2.7 hari</td></tr>
+        <tr><td>Jember</td><td class="td-mono">14,320</td><td class="td-neutral">11,742</td><td class="td-down">2,002</td><td class="td-down">576</td><td class="td-down">82.0%</td><td class="td-mono">3.1 hari</td></tr>
+        <tr><td>Banyuwangi</td><td class="td-mono">9,840</td><td class="td-neutral">7,872</td><td class="td-down">1,574</td><td class="td-down">394</td><td class="td-down">80.0%</td><td class="td-mono">3.4 hari</td></tr>
+        <tr><td>Badung (Bali)</td><td class="td-mono">8,450</td><td class="td-up">7,436</td><td class="td-down">845</td><td class="td-down">169</td><td class="td-up">88.0%</td><td class="td-mono">2.5 hari</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-grid cg3 reveal">
+    <div class="chart-box"><div class="chart-box-title"><strong>OTD Rate per Kota</strong></div><canvas id="c2a" height="220"></canvas></div>
+    <div class="chart-box"><div class="chart-box-title"><strong>Volume Distribusi</strong> — per Kota</div><canvas id="c2b" height="220"></canvas></div>
+    <div class="chart-box"><div class="chart-box-title"><strong>Tren Volume</strong> — Bulanan 2022</div><canvas id="c2c" height="220"></canvas></div>
+  </div>
+
+  <div class="table-wrap reveal">
+    <div class="table-title">Tabel 2.2 — Root Cause Analysis: Failed Delivery</div>
+    <table>
+      <thead><tr><th>Penyebab</th><th>Jumlah</th><th>% Total</th><th>Dampak Biaya</th><th>Prioritas</th></tr></thead>
+      <tbody>
+        <tr><td>Alamat tidak ditemukan</td><td class="td-mono">982</td><td class="td-down">35.6%</td><td class="td-down">Tinggi</td><td><span class="badge-sm br">Critical</span></td></tr>
+        <tr><td>Penerima tidak ada</td><td class="td-mono">748</td><td class="td-down">27.1%</td><td class="td-neutral">Sedang</td><td><span class="badge-sm by">High</span></td></tr>
+        <tr><td>Paket rusak / reject</td><td class="td-mono">386</td><td class="td-neutral">14.0%</td><td class="td-down">Tinggi</td><td><span class="badge-sm br">Critical</span></td></tr>
+        <tr><td>Cuaca / force majeure</td><td class="td-mono">298</td><td class="td-neutral">10.8%</td><td class="td-neutral">Sedang</td><td><span class="badge-sm bb">Monitor</span></td></tr>
+        <tr><td>Kapasitas kurir penuh</td><td class="td-mono">247</td><td class="td-up">8.9%</td><td class="td-neutral">Sedang</td><td><span class="badge-sm by">High</span></td></tr>
+        <tr><td>Lainnya</td><td class="td-mono">96</td><td class="td-up">3.6%</td><td class="td-up">Rendah</td><td><span class="badge-sm bb">Monitor</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-grid cg2 reveal">
+    <div class="chart-box"><div class="chart-box-title"><strong>Penyebab Failed Delivery</strong></div><canvas id="c2d" height="200"></canvas></div>
+    <div class="chart-box"><div class="chart-box-title"><strong>Avg Lead Time per Kota</strong> — Hari</div><canvas id="c2e" height="200"></canvas></div>
+  </div>
+
+  <div class="findings reveal">
+    <div class="finding"><div class="finding-icon">🚨</div><h4>Alamat = masalah terbesar (35.6%)</h4><p>Solusi: validasi alamat real-time saat order via geocoding API atau verifikasi WhatsApp otomatis.</p></div>
+    <div class="finding"><div class="finding-icon">📍</div><h4>Banyuwangi butuh perhatian</h4><p>OTD 80% & lead time 3.4 hari — paling rendah. Review kapasitas kurir dan optimasi rute distribusi.</p></div>
+    <div class="finding"><div class="finding-icon">⚡</div><h4>Surabaya jadi benchmark</h4><p>91.7% OTD dengan volume tertinggi — best practice operasional untuk diadopsi kota lain.</p></div>
+  </div>
+</div>
+
+<hr class="full-divider">
+
+<!-- PROJECT 3: E-COMMERCE -->
+<div class="section-wrap" id="p3">
+  <div class="section-num reveal">// 03 — E-Commerce & Digital Marketing</div>
+  <h2 class="reveal">Sales & Traffic<br><span>Performance Analysis</span></h2>
+  <p class="section-sub reveal">Analisa GMV, conversion rate, traffic channel, dan ROAS selama 8 bulan kampanye digital.</p>
+
+  <div class="insight-row reveal">
+    <div class="insight-box yellow"><div class="insight-val yellow">Rp 2.84B</div><div class="insight-desc">Total GMV 8 Bulan</div></div>
+    <div class="insight-box green"><div class="insight-val green">3.8%</div><div class="insight-desc">Avg Conversion Rate</div></div>
+    <div class="insight-box"><div class="insight-val blue">142K</div><div class="insight-desc">Total Sessions</div></div>
+    <div class="insight-box pink"><div class="insight-val pink">Rp 284K</div><div class="insight-desc">Avg Order Value</div></div>
+  </div>
+
+  <div class="table-wrap reveal">
+    <div class="table-title">Tabel 3.1 — Monthly E-Commerce Performance</div>
+    <table>
+      <thead><tr><th>Bulan</th><th>Sessions</th><th>Orders</th><th>Conv Rate</th><th>AOV (Rb)</th><th>Revenue (Jt)</th><th>ROAS</th></tr></thead>
+      <tbody>
+        <tr><td>Sep 2023</td><td class="td-mono">14,200</td><td class="td-mono">498</td><td class="td-neutral">3.5%</td><td class="td-mono">268</td><td class="td-mono">133</td><td class="td-up">3.2x</td></tr>
+        <tr><td>Okt 2023</td><td class="td-mono">16,800</td><td class="td-mono">622</td><td class="td-up">3.7%</td><td class="td-mono">275</td><td class="td-mono">171</td><td class="td-up">3.6x</td></tr>
+        <tr><td>Nov 2023</td><td class="td-mono">22,400</td><td class="td-up">942</td><td class="td-up">4.2%</td><td class="td-mono">288</td><td class="td-up">271</td><td class="td-up">4.1x</td></tr>
+        <tr><td>Des 2023</td><td class="td-mono">25,100</td><td class="td-up">1,080</td><td class="td-up">4.3%</td><td class="td-mono">310</td><td class="td-up">335</td><td class="td-up">4.5x</td></tr>
+        <tr><td>Jan 2024</td><td class="td-mono">17,200</td><td class="td-neutral">568</td><td class="td-down">3.3%</td><td class="td-mono">271</td><td class="td-mono">154</td><td class="td-neutral">3.1x</td></tr>
+        <tr><td>Feb 2024</td><td class="td-mono">15,600</td><td class="td-neutral">530</td><td class="td-neutral">3.4%</td><td class="td-mono">266</td><td class="td-mono">141</td><td class="td-neutral">3.0x</td></tr>
+        <tr><td>Mar 2024</td><td class="td-mono">18,400</td><td class="td-neutral">643</td><td class="td-neutral">3.5%</td><td class="td-mono">278</td><td class="td-mono">179</td><td class="td-up">3.4x</td></tr>
+        <tr><td>Apr 2024</td><td class="td-mono">12,300</td><td class="td-down">443</td><td class="td-neutral">3.6%</td><td class="td-mono">258</td><td class="td-mono">114</td><td class="td-down">2.8x</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-grid cg2 reveal">
+    <div class="chart-box"><div class="chart-box-title"><strong>Revenue & Sessions</strong> — 8 bulan</div><canvas id="c3a" height="200"></canvas></div>
+    <div class="chart-box"><div class="chart-box-title"><strong>Conversion Rate Trend</strong></div><canvas id="c3b" height="200"></canvas></div>
+  </div>
+
+  <div class="table-wrap reveal">
+    <div class="table-title">Tabel 3.2 — Traffic Channel Performance</div>
+    <table>
+      <thead><tr><th>Channel</th><th>Sessions</th><th>Share</th><th>Conv Rate</th><th>Revenue</th><th>CPA</th><th>ROAS</th></tr></thead>
+      <tbody>
+        <tr><td>Organic Search (SEO)</td><td class="td-mono">48,200</td><td class="td-up">33.9%</td><td class="td-up">4.8%</td><td class="td-up">Rp 891jt</td><td class="td-up">—</td><td class="td-up">∞</td></tr>
+        <tr><td>Paid Search (SEM)</td><td class="td-mono">32,100</td><td class="td-mono">22.6%</td><td class="td-up">4.2%</td><td class="td-mono">Rp 642jt</td><td class="td-neutral">Rp 48K</td><td class="td-up">4.1x</td></tr>
+        <tr><td>Social Media</td><td class="td-mono">28,400</td><td class="td-mono">20.0%</td><td class="td-neutral">3.4%</td><td class="td-mono">Rp 512jt</td><td class="td-neutral">Rp 62K</td><td class="td-neutral">3.3x</td></tr>
+        <tr><td>Direct</td><td class="td-mono">18,800</td><td class="td-mono">13.2%</td><td class="td-up">4.6%</td><td class="td-mono">Rp 428jt</td><td class="td-up">—</td><td class="td-up">∞</td></tr>
+        <tr><td>Email Marketing</td><td class="td-mono">9,200</td><td class="td-mono">6.5%</td><td class="td-up">5.2%</td><td class="td-up">Rp 208jt</td><td class="td-up">Rp 18K</td><td class="td-up">7.8x</td></tr>
+        <tr><td>Referral</td><td class="td-mono">5,300</td><td class="td-mono">3.8%</td><td class="td-neutral">3.8%</td><td class="td-mono">Rp 162jt</td><td class="td-neutral">Rp 35K</td><td class="td-neutral">3.6x</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-grid cg2 reveal">
+    <div class="chart-box"><div class="chart-box-title"><strong>Traffic Share per Channel</strong></div><canvas id="c3c" height="200"></canvas></div>
+    <div class="chart-box"><div class="chart-box-title"><strong>ROAS per Channel</strong></div><canvas id="c3d" height="200"></canvas></div>
+  </div>
+
+  <div class="findings reveal">
+    <div class="finding"><div class="finding-icon">🔍</div><h4>SEO = ROI tak terbatas</h4><p>33.9% traffic, conv rate 4.8%, tanpa biaya iklan. Investasi konten SEO adalah yang paling efisien.</p></div>
+    <div class="finding"><div class="finding-icon">📧</div><h4>Email ROAS 7.8x — tertinggi</h4><p>Hanya 6.5% traffic tapi ROAS 7.8x. Perlu diperbesar: tambah list subscriber dan frekuensi campaign.</p></div>
+    <div class="finding"><div class="finding-icon">🎄</div><h4>Nov–Des puncak performa</h4><p>Harbolnas dorong sessions +77% dan revenue +252% vs bulan normal. Butuh strategi seasonal khusus.</p></div>
+  </div>
+</div>
+
+<hr class="full-divider">
+
+<!-- CODA TOOLS -->
+<div class="section-wrap" id="tools">
+  <div class="section-num reveal">// 04 — Financial Tools</div>
+  <h2 class="reveal">Interactive<br><span>Finance Tools</span></h2>
+  <p class="section-sub reveal">Tools keuangan interaktif yang dibangun di Coda.io — butuh koneksi internet untuk tampil.</p>
+
+  <div class="tools-grid">
+    <div class="tool-card reveal">
+      <div class="tool-card-header">
+        <div class="tool-card-title"><span class="tool-dot"></span>Budget Planner & Tracker</div>
+        <span class="tool-tag">Coda.io · Live</span>
+      </div>
+      <div class="coda-frame-wrap">
+        <!--
+          FORMAT LINK CODA YANG BENAR:
+          ✅ Pakai:   https://coda.io/embed/O6DB7Few5E/_su4Uaavk?viewMode=embedplay&hideSections=true
+          ❌ Jangan:  <iframe src="https://..."> di dalam src=""
+        -->
+        
+        <iframe
+          src="https://coda.io/embed/O6DB7Few5E/_suqbapE9?viewMode=embedplay"
+          width=1800 height=900 style="max-width: 100%;" allow="fullscreen"
+          title="Budget Planner Tool"
+        ></iframe>
+      </div>
+      <div class="tool-note">⚡ Membutuhkan koneksi internet · Coda.io embed</div>
+    </div>
+  </div>
+</div>
+
+<hr class="full-divider">
+
+<!-- EBOOK: VIEW ONLY via Google Drive Viewer -->
+<div class="ebook-section" id="ebook">
+  <div class="ebook-inner-new">
+
+    <div class="ebook-header-row reveal">
+      <div>
+        <div class="ebook-tag">// Free Resource</div>
+        <h2>Excel untuk<br><span>Pemula</span></h2>
+        <p>Panduan lengkap memulai Microsoft Excel dari nol — formula essensial, visualisasi data, hingga pivot table untuk analisa sederhana.</p>
+        <div class="ebook-badge-row">
+          <span class="ebook-badge bg">📊 Data Analysis</span>
+          <span class="ebook-badge by">🎓 Beginner Friendly</span>
+          <span class="ebook-badge bb">✍️ By Almadha Rafif</span>
+          <span class="ebook-badge" style="background:rgba(248,113,113,0.1);color:var(--red);border:1px solid rgba(248,113,113,0.2);">🔒 View Only</span>
+        </div>
+
+      </div>
+      <div style="text-align:right;padding-top:2rem;">
+        <div style="font-family:var(--mono);font-size:0.7rem;color:var(--muted);margin-bottom:0.3rem;">Format</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--accent2);">PDF</div>
+      </div>
+    </div>
+
+    <div class="ebook-view-wrap reveal">
+      <div class="ebook-bar">
+        <div class="ebook-bar-left">📗 &nbsp;Excel untuk Pemula — Almadha Rafif Prastya</div>
+        <div class="ebook-bar-right">🔒 View Only</div>
+      </div>
+
+      <iframe
+        class="ebook-iframe"
+        src="https://drive.google.com/file/d/1fX6rIIMl8YKe4VT_eWAmEKDtwFZfNEi5/preview"
+        title="Excel untuk Pemula"
+        allow="autoplay"
+      ></iframe>
+
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left"><strong>Almadha Rafif Prastya</strong> — Data Analyst & Excel Trainer · Malang, Indonesia</div>
+  <div class="footer-contact">
+    <a href="mailto:almadha14@gmail.com">✉ almadha14@gmail.com</a>
+    <a href="https://wa.me/6288989862043" target="_blank">💬 +62 889 8986 2043</a>
+    <a href="https://wa.me/6288994572065" target="_blank">💬 +62 889 9457 2065</a>
+  </div>
+</footer>
+
+<script>
+Chart.defaults.color='#5a7a9a';Chart.defaults.font.family="'DM Mono',monospace";Chart.defaults.font.size=11;
+const G='rgba(99,179,237,0.06)';
+const C={blue:'#38bdf8',yellow:'#f59e0b',green:'#34d399',pink:'#f472b6',red:'#f87171',purple:'#a78bfa',bA:'rgba(56,189,248,0.18)',yA:'rgba(245,158,11,0.18)',gA:'rgba(52,211,153,0.18)',pA:'rgba(244,114,182,0.18)',rA:'rgba(248,113,113,0.18)',vA:'rgba(167,139,250,0.18)'};
+const TT={backgroundColor:'#111827',borderColor:'rgba(99,179,237,0.2)',borderWidth:1,padding:10};
+const XA={grid:{color:G},ticks:{color:'#5a7a9a'}};const YA={grid:{color:G},ticks:{color:'#5a7a9a'}};
+
+new Chart(document.getElementById('c1a'),{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','Mei','Jun'],datasets:[{label:'Target',data:[980,1020,1050,1080,1150,1200],backgroundColor:C.vA,borderColor:C.purple,borderWidth:1.5,borderRadius:5},{label:'Aktual',data:[942,1058,986,1102,1178,1434],backgroundColor:C.yA,borderColor:C.yellow,borderWidth:1.5,borderRadius:5}]},options:{responsive:true,plugins:{legend:{labels:{color:'#5a7a9a'}},tooltip:TT},scales:{x:XA,y:{...YA,ticks:{...YA.ticks,callback:v=>'Rp'+v+'jt'}}}}});
+new Chart(document.getElementById('c1b'),{type:'line',data:{labels:['Feb','Mar','Apr','Mei','Jun'],datasets:[{label:'MoM %',data:[12.3,-6.8,11.8,6.9,21.7],borderColor:C.green,backgroundColor:C.gA,borderWidth:2,fill:true,tension:0.4,pointRadius:5,pointBackgroundColor:['#34d399','#f87171','#34d399','#34d399','#34d399']}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:TT},scales:{x:XA,y:{...YA,ticks:{...YA.ticks,callback:v=>v+'%'}}}}});
+new Chart(document.getElementById('c1c'),{type:'doughnut',data:{labels:['COGS 52%','OpEx 18%','EBITDA 30%'],datasets:[{data:[52,18,30],backgroundColor:[C.rA,C.yA,C.gA],borderColor:[C.red,C.yellow,C.green],borderWidth:2,hoverOffset:8}]},options:{responsive:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:'#5a7a9a',padding:12}},tooltip:TT}}});
+new Chart(document.getElementById('c1d'),{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','Mei','Jun'],datasets:[{label:'Achievement %',data:[96.1,103.7,93.9,102.0,102.4,119.5],backgroundColor:['rgba(248,113,113,0.2)','rgba(52,211,153,0.2)','rgba(248,113,113,0.2)','rgba(52,211,153,0.2)','rgba(52,211,153,0.2)','rgba(52,211,153,0.2)'],borderColor:['#f87171','#34d399','#f87171','#34d399','#34d399','#34d399'],borderWidth:1.5,borderRadius:5}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:TT},scales:{x:XA,y:{...YA,min:85,ticks:{...YA.ticks,callback:v=>v+'%'}}}}});
+
+const kota=['Surabaya','Malang','Denpasar','Jember','Banyuwangi','Badung'];
+new Chart(document.getElementById('c2a'),{type:'bar',data:{labels:kota,datasets:[{label:'OTD %',data:[91.7,88.5,86.5,82.0,80.0,88.0],backgroundColor:[C.gA,C.gA,C.yA,C.rA,C.rA,C.gA],borderColor:[C.green,C.green,C.yellow,C.red,C.red,C.green],borderWidth:1.5,borderRadius:5}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:TT},scales:{x:{...XA,min:75,ticks:{...XA.ticks,callback:v=>v+'%'}},y:{grid:{display:false},ticks:{color:'#5a7a9a'}}}}});
+new Chart(document.getElementById('c2b'),{type:'doughnut',data:{labels:kota,datasets:[{data:[38420,22180,18750,14320,9840,8450],backgroundColor:[C.bA,C.yA,C.gA,C.pA,C.vA,C.rA],borderColor:[C.blue,C.yellow,C.green,C.pink,C.purple,C.red],borderWidth:2,hoverOffset:8}]},options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom',labels:{color:'#5a7a9a',padding:8,font:{size:10}}},tooltip:TT}}});
+new Chart(document.getElementById('c2c'),{type:'line',data:{labels:['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],datasets:[{label:'Volume',data:[10200,10800,11400,12000,12800,13200,13800,14100,12900,13500,14200,15600],borderColor:C.blue,backgroundColor:C.bA,borderWidth:2,fill:true,tension:0.4,pointRadius:3}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:TT},scales:{x:XA,y:{...YA,ticks:{...YA.ticks,callback:v=>(v/1000).toFixed(0)+'K'}}}}});
+new Chart(document.getElementById('c2d'),{type:'pie',data:{labels:['Alamat invalid','Tdk ada penerima','Paket rusak','Cuaca','Kapasitas penuh','Lainnya'],datasets:[{data:[35.6,27.1,14.0,10.8,8.9,3.6],backgroundColor:[C.rA,C.yA,C.pA,C.bA,C.vA,C.gA],borderColor:[C.red,C.yellow,C.pink,C.blue,C.purple,C.green],borderWidth:2,hoverOffset:8}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#5a7a9a',padding:8,font:{size:10}}},tooltip:TT}}});
+new Chart(document.getElementById('c2e'),{type:'bar',data:{labels:kota,datasets:[{label:'Lead Time (hari)',data:[1.8,2.1,2.7,3.1,3.4,2.5],backgroundColor:[C.gA,C.gA,C.yA,C.rA,C.rA,C.yA],borderColor:[C.green,C.green,C.yellow,C.red,C.red,C.yellow],borderWidth:1.5,borderRadius:5}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:TT},scales:{x:XA,y:{...YA,ticks:{...YA.ticks,callback:v=>v+' hr'}}}}});
+
+new Chart(document.getElementById('c3a'),{type:'bar',data:{labels:['Sep','Okt','Nov','Des','Jan','Feb','Mar','Apr'],datasets:[{label:'Revenue (Jt)',data:[133,171,271,335,154,141,179,114],backgroundColor:C.yA,borderColor:C.yellow,borderWidth:1.5,borderRadius:5},{label:'Sessions (K)',data:[14.2,16.8,22.4,25.1,17.2,15.6,18.4,12.3],type:'line',borderColor:C.blue,backgroundColor:'transparent',borderWidth:2,tension:0.4,pointRadius:4,yAxisID:'y2'}]},options:{responsive:true,plugins:{legend:{labels:{color:'#5a7a9a'}},tooltip:TT},scales:{x:XA,y:{...YA,ticks:{...YA.ticks,callback:v=>'Rp'+v+'jt'}},y2:{position:'right',grid:{display:false},ticks:{color:C.blue,callback:v=>v+'K'}}}}});
+new Chart(document.getElementById('c3b'),{type:'line',data:{labels:['Sep','Okt','Nov','Des','Jan','Feb','Mar','Apr'],datasets:[{label:'Conv %',data:[3.5,3.7,4.2,4.3,3.3,3.4,3.5,3.6],borderColor:C.green,backgroundColor:C.gA,borderWidth:2.5,fill:true,tension:0.4,pointRadius:5,pointBackgroundColor:C.green}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:TT},scales:{x:XA,y:{...YA,min:2.5,ticks:{...YA.ticks,callback:v=>v+'%'}}}}});
+new Chart(document.getElementById('c3c'),{type:'doughnut',data:{labels:['Organic SEO','Paid Search','Social Media','Direct','Email','Referral'],datasets:[{data:[33.9,22.6,20.0,13.2,6.5,3.8],backgroundColor:[C.gA,C.bA,C.pA,C.yA,C.vA,C.rA],borderColor:[C.green,C.blue,C.pink,C.yellow,C.purple,C.red],borderWidth:2,hoverOffset:8}]},options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom',labels:{color:'#5a7a9a',padding:8,font:{size:10}}},tooltip:TT}}});
+new Chart(document.getElementById('c3d'),{type:'bar',data:{labels:['Email','Paid Search','Referral','Social'],datasets:[{label:'ROAS',data:[7.8,4.1,3.6,3.3],backgroundColor:[C.gA,C.bA,C.yA,C.pA],borderColor:[C.green,C.blue,C.yellow,C.pink],borderWidth:1.5,borderRadius:5}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:TT},scales:{x:{...XA,ticks:{...XA.ticks,callback:v=>v+'x'}},y:{grid:{display:false},ticks:{color:'#5a7a9a'}}}}});
+
+document.addEventListener('contextmenu',e=>{if(e.target.closest('.ebook-view-wrap'))e.preventDefault();});
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){e.target.style.transitionDelay=(i%3)*0.07+'s';e.target.classList.add('visible');}});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
