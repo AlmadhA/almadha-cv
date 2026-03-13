@@ -224,6 +224,51 @@ section { position:relative; z-index:2; padding:100px 60px; }
 footer { position:relative; z-index:2; text-align:center; padding:32px 60px; border-top:1px solid var(--border-solid); font-size:.6rem; color:var(--text-dim); letter-spacing:2px; background:var(--bg2); }
 footer span { color:var(--blue); font-weight:700; }
 
+/* FLOATING TERMINAL BUTTON */
+#fab {
+  position:fixed; bottom:24px; right:24px; z-index:490;
+  width:52px; height:52px;
+  background:var(--blue); color:#fff;
+  border:none; border-radius:50%;
+  font-size:1.3rem;
+  box-shadow:0 4px 20px rgba(0,102,255,0.4);
+  cursor:none;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .25s;
+  animation:fabpulse 2.5s infinite;
+}
+#fab:hover { transform:scale(1.12); box-shadow:0 6px 28px rgba(0,102,255,0.55); }
+#fab.active { background:var(--blue-dark); border-radius:12px; transform:rotate(90deg); }
+@keyframes fabpulse {
+  0%,100% { box-shadow:0 4px 20px rgba(0,102,255,0.4); }
+  50% { box-shadow:0 4px 28px rgba(0,102,255,0.7), 0 0 0 8px rgba(0,102,255,0.08); }
+}
+
+/* FAB TOOLTIP */
+#fab-tip {
+  position:fixed; bottom:30px; right:86px; z-index:490;
+  background:var(--text); color:#fff;
+  font-family:var(--font-mono); font-size:.6rem; letter-spacing:2px;
+  padding:7px 14px; border-radius:4px; white-space:nowrap;
+  opacity:0; pointer-events:none;
+  transition:opacity .2s;
+}
+#fab-tip::after {
+  content:''; position:absolute; right:-6px; top:50%;
+  transform:translateY(-50%);
+  border:6px solid transparent;
+  border-right:none;
+  border-left-color:var(--text);
+}
+#fab:hover ~ #fab-tip, #fab-tip.show { opacity:1; }
+
+/* MOBILE CMD adjustments */
+@media(max-width:600px){
+  #cmd-input { padding:12px 16px; }
+  #cmd-field { font-size:.75rem; }
+  #fab { bottom:20px; right:20px; width:48px; height:48px; font-size:1.1rem; }
+}
+
 @media(max-width:900px){
   #boot { grid-template-columns:1fr; }
   .boot-photo { height:60vh; }
@@ -268,8 +313,13 @@ footer span { color:var(--blue); font-weight:700; }
 <!-- CMD INPUT -->
 <div id="cmd-input">
   <span class="cmd-prompt-label">ARP@system:~$</span>
-  <input id="cmd-field" placeholder="type a command... (try: help, skills, contact, sudo hire almadha)" autocomplete="off" spellcheck="false">
+  <input id="cmd-field" placeholder="try: help, skills, contact, sudo hire almadha" autocomplete="off" spellcheck="false">
+  <button onclick="closeCmd()" style="background:none;border:none;color:var(--text-dim);font-size:1.2rem;padding:0 6px;line-height:1;cursor:pointer;font-family:monospace;">✕</button>
 </div>
+
+<!-- FLOATING TERMINAL BUTTON -->
+<button id="fab" onclick="toggleCmd()" title="Open Terminal" aria-label="Open Terminal">⌨</button>
+<div id="fab-tip">Terminal [`]</div>
 
 <!-- NAV -->
 <nav>
@@ -358,7 +408,7 @@ footer span { color:var(--blue); font-weight:700; }
         Bagi saya, <strong>data bukan sekadar angka</strong> — data adalah cerita yang menunggu untuk dipahami dan diubah menjadi keputusan strategis.
       </div>
       <div class="id-contacts">
-        <a href="mailto:almadha14@gmail.com" class="id-contact-item">✉ almadha14@gmail.com</a>
+        <a href="/cdn-cgi/l/email-protection#7415181915101c154540341319151d185a171b19" class="id-contact-item">✉ <span class="__cf_email__" data-cfemail="f2939e9f93969a93c3c6b2959f939b9edc919d9f">[email&#160;protected]</span></a>
         <a href="https://wa.me/628898986204" class="id-contact-item" target="_blank">📱 +62 889 8986 2043</a>
         <a href="https://wa.me/628899457206" class="id-contact-item" target="_blank">💬 +62 889 9457 2065</a>
         <a href="https://www.linkedin.com/in/almadharafifp/" class="id-contact-item" target="_blank">💼 LinkedIn Profile ↗</a>
@@ -546,7 +596,7 @@ footer span { color:var(--blue); font-weight:700; }
         <br>
         <div class="c-output">
           <span class="t-comment">// establishing connection...</span><br><br>
-          <span class="t-key">Email</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a href="mailto:almadha14@gmail.com" class="c-link">almadha14@gmail.com</a><br>
+          <span class="t-key">Email</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <a href="/cdn-cgi/l/email-protection#ee8f82838f8a868fdfdaae89838f8782c08d8183" class="c-link"><span class="__cf_email__" data-cfemail="d0b1bcbdb1b4b8b1e1e490b7bdb1b9bcfeb3bfbd">[email&#160;protected]</span></a><br>
           <span class="t-key">WhatsApp</span>&nbsp; : <a href="https://wa.me/628898986204" class="c-link" target="_blank">+62 889 8986 2043</a><br>
           <span class="t-key">WhatsApp</span>&nbsp; : <a href="https://wa.me/628899457206" class="c-link" target="_blank">+62 889 9457 2065</a><br>
           <span class="t-key">LinkedIn</span>&nbsp;&nbsp; : <a href="https://www.linkedin.com/in/almadharafifp/" class="c-link" target="_blank">linkedin.com/in/almadharafifp ↗</a><br>
@@ -567,7 +617,7 @@ footer span { color:var(--blue); font-weight:700; }
   <p style="margin-top:8px;font-size:.5rem;opacity:.5;">press [`] to open command terminal</p>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // CURSOR
 const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
 let mx=0,my=0,rx=0,ry=0;
@@ -597,11 +647,26 @@ const sb=document.getElementById('skill-bars'); if(sb) skillObs.observe(sb);
 
 // CMD TERMINAL
 const cmdInput=document.getElementById('cmd-input'),cmdField=document.getElementById('cmd-field'),easter=document.getElementById('easter-egg');
+const fab=document.getElementById('fab'), fabTip=document.getElementById('fab-tip');
 let cmdOpen=false;
+
+function toggleCmd(){
+  cmdOpen=!cmdOpen;
+  cmdInput.classList.toggle('show',cmdOpen);
+  fab.classList.toggle('active',cmdOpen);
+  if(cmdOpen){ cmdField.focus(); fabTip.classList.remove('show'); }
+  else { cmdField.value=''; removeOutput(); }
+}
+
+// Keyboard shortcut (desktop)
 document.addEventListener('keydown',e=>{
-  if(e.key==='`'){ cmdOpen=!cmdOpen; cmdInput.classList.toggle('show',cmdOpen); if(cmdOpen) cmdField.focus(); e.preventDefault(); }
-  if(e.key==='Escape'&&cmdOpen){ cmdOpen=false; cmdInput.classList.remove('show'); cmdField.value=''; }
+  if(e.key==='`'){ toggleCmd(); e.preventDefault(); }
+  if(e.key==='Escape'&&cmdOpen){ cmdOpen=false; cmdInput.classList.remove('show'); fab.classList.remove('active'); cmdField.value=''; removeOutput(); }
 });
+
+// Show tooltip on first load (mobile hint)
+setTimeout(()=>{ fabTip.classList.add('show'); setTimeout(()=>fabTip.classList.remove('show'),3000); },2000);
+
 cmdField.addEventListener('keydown',e=>{ if(e.key==='Enter'){ const c=cmdField.value.trim().toLowerCase(); cmdField.value=''; handleCmd(c); } });
 
 function handleCmd(cmd){
@@ -621,7 +686,8 @@ function handleCmd(cmd){
   else showOutput('Command not found: "'+cmd+'"\nType "help" for available commands.');
 }
 function goto(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
-function closeCmd(){ cmdOpen=false; cmdInput.classList.remove('show'); }
+function closeCmd(){ cmdOpen=false; cmdInput.classList.remove('show'); fab.classList.remove('active'); cmdField.value=''; removeOutput(); }
+function removeOutput(){ const o=document.getElementById('cmd-out'); if(o) o.remove(); }
 function showOutput(msg){
   const old=document.getElementById('cmd-out'); if(old) old.remove();
   const out=document.createElement('div'); out.id='cmd-out';
@@ -632,12 +698,4 @@ function showOutput(msg){
 function closeEaster(){ easter.classList.remove('show'); }
 
 // PHOTO FALLBACK
-document.getElementById('hero-photo').addEventListener('error',function(){
-  this.style.display='none';
-  const ph=document.createElement('div');
-  ph.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10rem;opacity:.06;background:linear-gradient(135deg,#e2eaf2,#f0f4f8);';
-  ph.textContent='👤'; this.parentElement.appendChild(ph);
-});
-</script>
-</body>
-</html>
+document.getElementById('hero-photo').addE
